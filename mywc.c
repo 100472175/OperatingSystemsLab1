@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <fcntl.h>
-#include <stdlib.h>
 #include <unistd.h>
 
 #define BUFFER_SIZE 1
@@ -55,6 +54,7 @@ int main(int argc, char *argv[]) {
     // fd is the name given to the file inside the code, to reference the open file
     // CLOSE the input file.
     close(fd);
+    lines++;
 
     // Check if there was an error reading the file, and print an error message if there was.
     if (n == -1) {
