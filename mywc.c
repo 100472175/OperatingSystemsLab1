@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     // Initialize the line, word, and byte counters.
     int lines = 0, words = 0, bytes = 0;
     // Initialize a buffer to store the bytes read from the file. This is done but not completely necessary as the
-    // buffer size will be of length 1, but we think it is good practivce to do it this way, as it is more versatile
+    // buffer size will be of length 1, but we think it is good practice to do it this way, as it is more versatile
     char buffer[BUFFER_SIZE];
     // Initialize a variable to keep track of whether we are currently inside a word.
     int in_word = 0;

@@ -1,0 +1,2 @@
+SHELL=/bin/bash
+bin:/usr/bin:/bin:/usr/local/games:/usr/games:/snap/bin
