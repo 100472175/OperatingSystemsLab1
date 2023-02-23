@@ -15,23 +15,15 @@ int main(int argc, char *argv[]){
         return -1;
     }
 
-    char *path;
-    char cwd[256];
-
+    char * path;
     // If there is a path passed to the program, then, that will be the path
     if (argc == 2){
         path = malloc(strlen(argv[1])+1);
         strcpy(path, argv[1]);
     }
     else{
-        if (getcwd(cwd, sizeof(cwd)) == NULL) {
-            perror("getcwd() error");
-            return -1;
-        }
-        else
-            printf("current working directory is: %s\n", cwd);
-        //path = malloc(2);
-        //strcpy(path, ".");
+        path = malloc(2);
+        strcpy(path, ".");
     }
     // printf("%s\n", path);
     DIR *pDir;
@@ -48,7 +40,7 @@ int main(int argc, char *argv[]){
  */
     pDir = opendir(path);
     if (pDir == NULL) {
-        printf("Cannot open directory '%s', at line %i\n", path, __LINE__);
+        printf("Cannot open directory '%s'\n", path);
         return -1;
     }
     while ((pDirent = readdir(pDir)) != NULL) {
