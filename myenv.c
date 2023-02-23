@@ -8,24 +8,25 @@
 int main(int argc, char *argv[]) {
     // Check if the program was called with at least one argument (the input file).
     if (argc < 2) {
-        printf("Too few arguments. \nUsage: %s <input file>\n", argv[0]);
+        printf("Too few arguments. \nUsage: %s <input file> <string> <output file>\n", argv[0]);
         return -1;
     }
     // Open the input file for reading.
     int fd = open(argv[1], O_RDONLY);
     if (fd < 0) {
-        printf("Error opening file %s\n", argv[1]);
+        printf("Error opening file for reading %s\n", argv[1]);
         return -1;
     }
     // Open the output file, and if it already exists, it only opens it (O_CREAT)
     int fdo = open(argv[3], O_CREAT|O_RDWR, 0664);
     if (fdo < 0) {
-        printf("Error opening file %s\n", argv[3]);
+        printf("Error opening file to write %s\n", argv[3]);
         return -1;
     }
 
     int character; // Where the character from the file is stored temporarily
     char *linea; // Each of the lines individually processed
+    char *pointer;
     int line_length = 0;
     ssize_t n;
     linea = malloc(2);
@@ -43,7 +44,9 @@ int main(int argc, char *argv[]) {
     while (n > 0) {
         while ((character != '\n') && (n > 0)) {
             line_length++;
-            linea = realloc(linea, 1+line_length);
+            pointer = realloc(linea, strlen(linea)+1);
+            linea = pointer;
+            // linea = realloc(linea, 1+line_length);
             //printf("%p. In the line %d\n", linea, __LINE__);
             strcat(linea, (const char *) &character);
             //printf("%s\n", linea);
@@ -72,6 +75,7 @@ int main(int argc, char *argv[]) {
         }
         free(linea);
         linea = malloc(2);
+        strcpy(linea, "");
         line_length = 0;
         n = read(fd, &character, 1);
     }
