@@ -11,16 +11,24 @@ int main(int argc, char *argv[]) {
         printf("Too few arguments. \nUsage: %s <input file> <string> <output file>\n", argv[0]);
         return -1;
     }
-    // Open the input file for reading.
-    int fd = open(argv[1], O_RDONLY);
+    // Open the input file for reading, if the parameter is an argument:
+    //int fd = open(argv[1], O_RDONLY);
+    //if (fd < 0) {
+        //printf("Error opening file for reading %s\n", argv[1]);
+        //return -1;
+    //}
+    //As it is not:
+    int fd = open("env.txt", O_RDONLY);
     if (fd < 0) {
-        printf("Error opening file for reading %s\n", argv[1]);
+        printf("Error opening file for reading env.txt\n");
         return -1;
     }
+
+
     // Open the output file, and if it already exists, it only opens it (O_CREAT)
-    int fdo = open(argv[3], O_CREAT|O_WRONLY|O_TRUNC, 0664);
+    int fdo = open(argv[2], O_CREAT|O_WRONLY|O_TRUNC, 0664);
     if (fdo < 0) {
-        printf("Error opening file to write %s\n", argv[3]);
+        printf("Error opening file to write %s\n", argv[2]);
         return -1;
     }
 
@@ -30,8 +38,8 @@ int main(int argc, char *argv[]) {
     int line_length = 0;
 
     char *needle;
-    needle = malloc(strlen(argv[2])+2);
-    strncpy(needle, argv[2], strlen(argv[2]));
+    needle = malloc(strlen(argv[1])+2);
+    strncpy(needle, argv[1], strlen(argv[1]));
     strncat(needle, "=",1);
 
     ssize_t n;
@@ -67,7 +75,7 @@ int main(int argc, char *argv[]) {
                 exit(-1);
             }
             //Adds a new line, as the exercise was undestood as all the ocurrences of the pattern
-            //write(fdo, "\n", 1);
+            write(fdo, "\n", 1);
             // This return helps to speed up the process as if an occurrence is found, it is written,
             // and it will exit immediately
             close(fd);
