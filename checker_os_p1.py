@@ -271,7 +271,7 @@ def testExerciseENV(folder):
             print("MYENV CHECKER. INCORRECT TEST. Outputs differ")
             resultString += "0 "
     else:
-        print("MYENV CHECKER. INCORRECT TEST. Outputs differ")
+        print("MYENV CHECKER. INCORRECT TEST. File can't be found")
         resultString += "0 "
 
     # Realizamos la prueba sugerida (grep UTF-8 env.txt)

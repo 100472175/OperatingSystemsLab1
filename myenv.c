@@ -18,16 +18,22 @@ int main(int argc, char *argv[]) {
         return -1;
     }
     // Open the output file, and if it already exists, it only opens it (O_CREAT)
-    int fdo = open(argv[3], O_CREAT|O_RDWR, 0664);
+    int fdo = open(argv[3], O_CREAT|O_WRONLY|O_TRUNC, 0664);
     if (fdo < 0) {
         printf("Error opening file to write %s\n", argv[3]);
         return -1;
     }
 
-    int character; // Where the character from the file is stored temporarily
+    char character; // Where the character from the file is stored temporarily
     char *linea; // Each of the lines individually processed
     char *pointer;
     int line_length = 0;
+
+    char *needle;
+    needle = malloc(strlen(argv[2])+2);
+    strncpy(needle, argv[2], strlen(argv[2]));
+    strncat(needle, "=",1);
+
     ssize_t n;
     linea = malloc(2);
     //linea2 = malloc(2);
@@ -42,36 +48,31 @@ int main(int argc, char *argv[]) {
         return(-1);
     }
     while (n > 0) {
-        while ((character != '\n') && (n > 0)) {
+        while ((character != '\n') && (n > 0)){
+            //printf("character => #%s#\n", &character);
+            //while ((character != '\n') && (n > 0)) {
             line_length++;
-            pointer = realloc(linea, strlen(linea)+1);
+            pointer = realloc(linea, strlen(linea)+2);
             linea = pointer;
-            // linea = realloc(linea, 1+line_length);
-            //printf("%p. In the line %d\n", linea, __LINE__);
-            strcat(linea, (const char *) &character);
-            //printf("%s\n", linea);
-            // Prepared for the next character
+            strncat(linea, (const char *) &character, 1);
             n = read(fd, &character, 1);
         }
-        //printf("%s, %d\n", linea, __LINE__);
-
-        //Add the \n character to the end of the line:
-        //linea = realloc(linea, 1);
-        //strcat(linea, "\n");
-
-        //printf("Pre-Trace, %d\n", __LINE__);
-        // Compare with argv[1]
-        //printf("Line: %s -- Argument: %s -- %d", linea, argv[2], __LINE__);
-        if (strstr(linea, argv[2]) != NULL) {
-            //printf("Trace \nLine being #%s#\n", linea);
-            // write(fdo, linea, line_length);
+        //printf("Antes de comparar en la linea %i\n", __LINE__);
+        if (strstr(linea, needle) != NULL) {
+            //printf("Match, con linea -> #%s#\n", linea);
             if (write(fdo, linea, line_length) < line_length) {
                 perror("Writing File");
                 close(fd);
                 close(fdo);
                 exit(-1);
             }
-            write(fdo, "\n", 1);
+            //Adds a new line, as the exercise was undestood as all the ocurrences of the pattern
+            //write(fdo, "\n", 1);
+            // This return helps to speed up the process as if an occurrence is found, it is written,
+            // and it will exit immediately
+            close(fd);
+            close(fdo);
+            exit(0);
         }
         free(linea);
         linea = malloc(2);
@@ -79,7 +80,6 @@ int main(int argc, char *argv[]) {
         line_length = 0;
         n = read(fd, &character, 1);
     }
-    // printf("Traza_final\n");
     close(fd);
     close(fdo);
     return 0;
