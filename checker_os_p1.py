@@ -245,7 +245,7 @@ def testExerciseENV(folder):
 
     # Ejecutamos el programa del alumno
     os.chdir(folder)
-    cmd = programPath + "SHELL myenv_output.txt"
+    cmd = programPath + " SHELL myenv_output.txt"
     pro = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, preexec_fn=os.setsid)
     time.sleep(0.5)
     os.killpg(pro.pid, signal.SIGTERM)
