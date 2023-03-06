@@ -16,15 +16,15 @@ int main(int argc, char *argv[]){
     }
 
     char * path;
-    char cwd[512];
+    char cwd[PATH_MAX];
     // If there is a path passed to the program, then, that will be the path
     if (argc == 2){
         path = malloc(strlen(argv[1])+1);
         strcpy(path, argv[1]);
     }
     else{
-        path = malloc(512);
-        getcwd(cwd, 512);
+        path = malloc(PATH_MAX);
+        getcwd(cwd, PATH_MAX);
         strcpy(path, cwd);
     }
     // printf("%s\n", path);
