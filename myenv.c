@@ -8,14 +8,14 @@
 int main(int argc, char *argv[]) {
     // Check if the program was called with at least one argument (the input file).
     if (argc < 2) {
-        printf("Too few arguments. \nUsage: %s <input file> <string> <output file>\n", argv[0]);
+        printf("Too few arguments. \nUsage: %s <string> <output file>\n", argv[0]);
         return -1;
     }
     // Open the input file for reading, if the parameter is an argument:
     //int fd = open(argv[1], O_RDONLY);
     //if (fd < 0) {
-        //printf("Error opening file for reading %s\n", argv[1]);
-        //return -1;
+    //printf("Error opening file for reading %s\n", argv[1]);
+    //return -1;
     //}
     //As it is not:
     int fd = open("env.txt", O_RDONLY);
@@ -36,6 +36,8 @@ int main(int argc, char *argv[]) {
     char *linea; // Each of the lines individually processed
     char *pointer;
     int line_length = 0;
+    int j;
+    int correct;
 
     char *needle;
     needle = malloc(strlen(argv[1])+2);
@@ -56,6 +58,7 @@ int main(int argc, char *argv[]) {
         return(-1);
     }
     while (n > 0) {
+        correct = 0;
         while ((character != '\n') && (n > 0)){
             //printf("character => #%s#\n", &character);
             //while ((character != '\n') && (n > 0)) {
@@ -67,22 +70,28 @@ int main(int argc, char *argv[]) {
         }
         //printf("Antes de comparar en la linea %i\n", __LINE__);
         if ((strstr(linea, needle) != NULL) && (linea[0] == needle[0])){
-
-            //printf("Match, con linea -> #%s#\n", linea);
-            if (write(fdo, linea, line_length) < line_length) {
-                perror("Writing File");
+            correct = 1;
+            for(j = 0; j < strlen(needle); j++){
+                if (needle[j] != linea[j]){
+                    correct = 0;
+                }
+            }
+            if (correct == 1) {
+                //printf("Match, con linea -> #%s#\n", linea);
+                if (write(fdo, linea, line_length) < line_length) {
+                    perror("Writing File");
+                    close(fd);
+                    close(fdo);
+                    exit(-1);
+                }
+                //Adds a new line, as the exercise was undestood as all the ocurrences of the pattern
+                write(fdo, "\n", 1);
+                // This return helps to speed up the process as if an occurrence is found, it is written,
+                // and it will exit immediately
                 close(fd);
                 close(fdo);
-                exit(-1);
+                exit(0);
             }
-
-            //Adds a new line, as the exercise was undestood as all the ocurrences of the pattern
-            write(fdo, "\n", 1);
-            // This return helps to speed up the process as if an occurrence is found, it is written,
-            // and it will exit immediately
-            close(fd);
-            close(fdo);
-            exit(0);
         }
         free(linea);
         linea = malloc(2);
