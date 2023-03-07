@@ -87,10 +87,11 @@ int main(int argc, char *argv[]) {
                 //Adds a new line, as the exercise was undestood as all the ocurrences of the pattern
                 write(fdo, "\n", 1);
                 // This return helps to speed up the process as if an occurrence is found, it is written,
-                // and it will exit immediately
-                close(fd);
-                close(fdo);
-                exit(0);
+                // and it will exit immediately. This works if we only wanted one instance of the variable,
+                // as it is not the case, we can't use this approach
+                //close(fd);
+                //close(fdo);
+                //exit(0);
             }
         }
         free(linea);
