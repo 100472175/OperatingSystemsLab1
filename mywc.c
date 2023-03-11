@@ -47,9 +47,11 @@ int main(int argc, char *argv[]) {
         }
         // Lastly, if we are inside a word, and a character is read, no counter will be updated except for the
         // bytes one, which is done at the start.
-        //} If the BUFFER_SIZE was anything but 1, this line would need to be uncommented
 
     }
+
+    // Print the line, word, and byte counters, followed by the input file name.
+    printf("%d %d %d %s\n", lines, words, bytes, argv[1]);
 
     // fd is the name given to the file inside the code, to reference the open file
     // CLOSE the input file.
@@ -61,7 +63,6 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-    // Print the line, word, and byte counters, followed by the input file name.
-    printf("%d %d %d %s\n", lines, words, bytes, argv[1]);
+
     return 0;
 }
