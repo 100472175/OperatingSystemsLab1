@@ -5,7 +5,6 @@
 #include <sys/types.h>	// Header file for system calls opendir, readdir y closedir
 #include <dirent.h>
 #include <string.h>
-#include <stdlib.h>
 
 
 int main(int argc, char *argv[]){
@@ -14,23 +13,17 @@ int main(int argc, char *argv[]){
         printf("Too many arguments.\n");
         return -1;
     }
-
-    //char * path;
     char cwd[PATH_MAX];
-    // If there is a path passed to the program, then, that will be the path
-    if (argc == 2){
-        //path = malloc(strlen(argv[1])+1);
-        strcpy(cwd, argv[1]);
-    }
-    else{
-        //path = malloc(PATH_MAX);
-        getcwd(cwd, PATH_MAX);
-        //strcpy(path, cwd);
-    }
-    // printf("%s\n", path);
     DIR *pDir;
     struct dirent *pDirent;
 
+    // If there is a path passed to the program, then, that will be the path
+    if (argc == 2){
+        strcpy(cwd, argv[1]);
+    }
+    else{
+        getcwd(cwd, PATH_MAX);
+    }
     pDir = opendir(cwd);
     if (pDir == NULL) {
         printf("Cannot open directory '%s'\n", cwd);
